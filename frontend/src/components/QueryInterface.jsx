@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import config from '../config';
 
 function QueryInterface({ schema, schemaText, onBack }) {
   const [question, setQuestion] = useState('');
@@ -22,7 +23,7 @@ function QueryInterface({ schema, schemaText, onBack }) {
 
       console.log("Sending schema:", formattedSchema); // Debug log
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query`, { 
+      const response = await axios.post(`${config.apiUrl}/query`, { 
         question,
         db_schema: formattedSchema,
         connection: {

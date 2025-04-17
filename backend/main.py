@@ -25,12 +25,22 @@ client = InferenceClient(
     token=HF_TOKEN
 )
 
-app = FastAPI()
+app = FastAPI(
+    title="SQL Query Generator API",
+    description="API for converting natural language to SQL queries",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
+)
 
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://txt2sql.vercel.app"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://txt2sql.vercel.app",
+        "https://txt-sql.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
