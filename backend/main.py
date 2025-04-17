@@ -340,3 +340,14 @@ SQL Query:"""
     except Exception as e:
         print("Error details:", str(e))
         raise HTTPException(status_code=400, detail=str(e))
+
+if __name__ == "__main__":
+    import uvicorn
+    # Set reload=True for development
+    uvicorn.run(
+        "main:app", 
+        host="0.0.0.0", 
+        port=8000,
+        reload=True,  # Enable auto-reload
+        log_level="info"  # Show detailed logs
+    )
