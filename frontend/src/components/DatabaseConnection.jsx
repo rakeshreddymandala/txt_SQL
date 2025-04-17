@@ -21,7 +21,7 @@ function DatabaseConnection({ onConnect }) {
       localStorage.setItem('db_password', credentials.password);
       localStorage.setItem('db_database', credentials.database);
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/connect`, credentials);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/connect`|| 'https://txt2sql.onrender.com/connect', credentials);
       onConnect(response.data);
     } catch (error) {
       alert('Connection failed: ' + (error.response?.data?.detail || error.message));
