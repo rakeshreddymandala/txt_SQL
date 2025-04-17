@@ -22,7 +22,7 @@ function QueryInterface({ schema, schemaText, onBack }) {
 
       console.log("Sending schema:", formattedSchema); // Debug log
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query` || "https://txt2sql.onrender.com/query", { 
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/query`, { 
         question,
         db_schema: formattedSchema,
         connection: {

@@ -21,7 +21,7 @@ function DatabaseConnection({ onConnect }) {
       localStorage.setItem('db_password', credentials.password);
       localStorage.setItem('db_database', credentials.database);
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/connect`|| 'https://txt2sql.onrender.com/connect', credentials);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/connect`, credentials);
       onConnect(response.data);
     } catch (error) {
       alert('Connection failed: ' + (error.response?.data?.detail || error.message));
@@ -43,7 +43,7 @@ function DatabaseConnection({ onConnect }) {
     formData.append('database', credentials.database);
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/upload-sql`, formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/upload-sql`, formData);
       onConnect(response.data);
     } catch (error) {
       alert('Upload failed: ' + (error.response?.data?.detail || error.message));
