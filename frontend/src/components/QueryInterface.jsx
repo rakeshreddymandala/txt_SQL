@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function QueryInterface({ schema, schemaText, onBack }) {
   const [question, setQuestion] = useState('');
@@ -21,35 +22,23 @@ function QueryInterface({ schema, schemaText, onBack }) {
 
       console.log("Sending schema:", formattedSchema); // Debug log
 
-      const response = await fetch('http://localhost:8000/query', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          question,
-          db_schema: formattedSchema,
-          connection: {
-            host: localStorage.getItem('db_host') || '127.0.0.1',
-            port: localStorage.getItem('db_port') || '3306',
-            user: localStorage.getItem('db_user') || '',
-            password: localStorage.getItem('db_password') || '',
-            database: localStorage.getItem('db_database') || ''
-          }
-        }),
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/query`, { 
+        question,
+        db_schema: formattedSchema,
+        connection: {
+          host: localStorage.getItem('db_host') || '127.0.0.1',
+          port: localStorage.getItem('db_port') || '3306',
+          user: localStorage.getItem('db_user') || '',
+          password: localStorage.getItem('db_password') || '',
+          database: localStorage.getItem('db_database') || ''
+        }
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Query failed');
-      }
-
-      const data = await response.json();
-      setResult(data.results);
-      setSql(data.sql);
+      setResult(response.data.results);
+      setSql(response.data.sql);
     } catch (error) {
       console.error('Query error:', error);
-      alert('Query failed: ' + error.message);
+      alert('Query failed: ' + (error.response?.data?.detail || error.message));
     }
     setLoading(false);
   };

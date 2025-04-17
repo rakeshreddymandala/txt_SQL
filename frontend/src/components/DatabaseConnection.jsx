@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function DatabaseConnection({ onConnect }) {
   const [connectionType, setConnectionType] = useState('credentials');
@@ -20,23 +21,10 @@ function DatabaseConnection({ onConnect }) {
       localStorage.setItem('db_password', credentials.password);
       localStorage.setItem('db_database', credentials.database);
 
-      const response = await fetch('http://localhost:8000/connect', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        onConnect(data);  // Pass the complete response data
-      } else {
-        const error = await response.json();
-        alert(error.detail);
-      }
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/connect`, credentials);
+      onConnect(response.data);
     } catch (error) {
-      alert('Connection failed: ' + error.message);
+      alert('Connection failed: ' + (error.response?.data?.detail || error.message));
     }
   };
 
@@ -55,20 +43,10 @@ function DatabaseConnection({ onConnect }) {
     formData.append('database', credentials.database);
 
     try {
-      const response = await fetch('http://localhost:8000/upload-sql', {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        onConnect(data);
-      } else {
-        const error = await response.json();
-        alert(error.detail);
-      }
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/upload-sql`, formData);
+      onConnect(response.data);
     } catch (error) {
-      alert('Upload failed: ' + error.message);
+      alert('Upload failed: ' + (error.response?.data?.detail || error.message));
     }
   };
 
